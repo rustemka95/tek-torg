@@ -1,10 +1,8 @@
 <input type="button" onclick="history.back(-2); return false;" value="Назад"/><br>
-
 <?php
 
 function calculate(int $rock, $bug)
 {
-
     echo '<table border = 1>
     <tr>
         <th>Номер жука</th>
@@ -12,7 +10,6 @@ function calculate(int $rock, $bug)
         <th>Позиция</th>
         <th>Справа</th>
     </tr>';
-
     $maxRast = $rock; //изначально максимальная длина отрезка = длине отрезка
     $maxStart = 1; //Начало самого длинного отрезка изначально = 1
     $location[0] = 1;  //обозначил левую границу отрезка
@@ -41,9 +38,8 @@ function calculate(int $rock, $bug)
                 <th>' . $right . '</th>
             </tr>';
     }
-
 }
-
+//Проверка на адекватность вводимой информации и вызов функции вычисления
 if (!empty($_POST['rock']) && !empty($_POST['bug'])) {
     $rock = (htmlentities($_POST['rock']));
     $bug = (htmlentities($_POST['bug']));
