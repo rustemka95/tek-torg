@@ -2,18 +2,18 @@
 
 <?php
 
-function Main($rock, $bug)
+function calculate(int $rock, $bug)
 {
-    echo '
-        <table border = 1>
-            <tr>
-                <th>Номер жука</th>
-                <th>Слева</th>
-                <th>Позиция</th>
-                <th>Справа</th>
-            </tr>
-        ';
-    $maxRast = $rock; //изначально максимальная длина отрезка = длине отрезка
+
+    echo '<table border = 1>
+    <tr>
+        <th>Номер жука</th>
+        <th>Слева</th>
+        <th>Позиция</th>
+        <th>Справа</th>
+    </tr>';
+
+$maxRast = $rock; //изначально максимальная длина отрезка = длине отрезка
     $maxStart = 1; //Начало самого длинного отрезка изначально = 1
     $location[0] = 1;  //обозначил левую границу отрезка
     $location[$rock + 1] = 1; //обозначил правую границу отрезка
@@ -32,7 +32,6 @@ function Main($rock, $bug)
                 $maxRast = $rast; //находим самый длинный отрезок
                 $maxStart = $key - $maxRast; //находим позицию, с которой начинается самый длинный отрезок
             }
-            $prevRast = $rast; //сохраняем значение для следующей итерации
             $prevKey = $key; //сохраняем значение для следующей итерации
         }
         echo '<tr>
@@ -46,21 +45,20 @@ function Main($rock, $bug)
 }
 
 if (!empty($_POST['rock']) && !empty($_POST['bug'])) {
-    $rock = htmlentities($_POST['rock']);
-    $bug = htmlentities($_POST['bug']);
-    $rock = intval($rock);
-    $bug = intval($rock);
-    if (is_int($rock) && is_int($bug)) {
-        if ($rock >= $bug) {
-            main($rock, $bug);
-        } else {
-            echo 'Количество жуков больше количества камней!';
-        }
-    } else {
-        echo 'Введите целое число камней и жуков';
+    $rock = (htmlentities($_POST['rock']));
+    $bug = (htmlentities($_POST['bug']));
+    if(!is_numeric($rock)||!is_numeric($bug))
+    {
+        throw new Exception('Введите число!');
     }
-} else {
-    echo 'Введите количество камней и жуков';
+        if ($rock >= $bug) {
+            calculate((int)$rock, (int)$bug);
+        } else {
+            throw new Exception('Количество жуков больше количества камней!');
+        }
+    }
+ else {
+    throw new Exception('Введите количество камней и жуков');
 }
 
 
