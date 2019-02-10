@@ -1,29 +1,9 @@
-<?php
+<input type="button" onclick="history.back(-2); return false;" value="Назад"/><br>
 
+<?php
 
 function Main($rock, $bug)
 {
-
-    $location[0] = 1;  //обозначил левую границу отрезка
-    $location[$rock + 1] = 1; //обозначил правую границу отрезка
-    $pos = floor($rock / 2); //позиция жука
-    $right = $rock - $pos; //из длины отрезка отнимаем текущую ячейку и находим кол-во свободных ячеек справа
-    $left = $rock - $right - 1; //из длины отрезка отнимаем кол-во свободных ячеек справа и -1, т.к. одну ячейку мы заняли жуком
-    $location[$pos] = 1; //Записываем позицию жука в массив
-    ksort($location); //сортируем массив
-
-    // находим самый длинный отрезок
-    $prevKey = 0;
-    $maxRast = 0;
-    foreach ($location as $key => $value) {
-        $rast = $key - $prevKey - 1; //расстояние между текущей точкой и предыдущей. -1 т.к. нумерация с 0
-        if ($rast > $maxRast) {
-            $maxRast = $rast; //находим самый длинный отрезок
-            $maxStart = $key - $maxRast; //находим позицию, с которой начинается самый длинный отрезок
-        }
-        $prevRast = $rast; //сохраняем значение для следующей итерации
-        $prevKey = $key; //сохраняем значение для следующей итерации
-    }
     echo '
         <table border = 1>
             <tr>
@@ -33,29 +13,27 @@ function Main($rock, $bug)
                 <th>Справа</th>
             </tr>
         ';
-    echo '<tr>
-                <th>1</th>
-                <th>' . $left . '</th>
-                <th>' . $pos . '</th>
-                <th>' . $right . '</th>
-            </tr>';
-
-    for ($i = 2; $i <= $bug; $i++) {
-        $right = floor($maxRast / 2);
-        $left = $maxRast - $right - 1;
-        $pos = $maxStart + $left;
-        $location[$pos] = 1;
-        ksort($location);
+    $maxRast = $rock; //изначально максимальная длина отрезка = длине отрезка
+    $maxStart = 1; //Начало самого длинного отрезка изначально = 1
+    $location[0] = 1;  //обозначил левую границу отрезка
+    $location[$rock + 1] = 1; //обозначил правую границу отрезка
+    for ($i = 1; $i <= $bug; $i++) { //цикл выполняется, пока жуки не закончатся
+        $right = floor($maxRast / 2); //из длины отрезка отнимаем текущую ячейку и находим кол-во свободных ячеек справа
+        $left = $maxRast - $right - 1; //из длины отрезка отнимаем кол-во свободных ячеек справа и -1, т.к. одну ячейку мы заняли жуком
+        $pos = $maxStart + $left; //позиция жука
+        $location[$pos] = 1; //Записываем позицию жука в массив
+        ksort($location); //сортируем массив
+        // находим самый длинный отрезок
         $prevKey = 0;
         $maxRast = 0;
         foreach ($location as $key => $value) {
-            $rast = $key - $prevKey - 1;
+            $rast = $key - $prevKey - 1; //расстояние между текущей точкой и предыдущей. -1 т.к. нумерация с 0
             if ($rast > $maxRast) {
-                $maxRast = $rast;
-                $maxStart = $key - $maxRast;
+                $maxRast = $rast; //находим самый длинный отрезок
+                $maxStart = $key - $maxRast; //находим позицию, с которой начинается самый длинный отрезок
             }
-            $prevRast = $rast;
-            $prevKey = $key;
+            $prevRast = $rast; //сохраняем значение для следующей итерации
+            $prevKey = $key; //сохраняем значение для следующей итерации
         }
         echo '<tr>
                 <th>' . $i . '</th>
@@ -70,7 +48,9 @@ function Main($rock, $bug)
 if (!empty($_POST['rock']) && !empty($_POST['bug'])) {
     $rock = htmlentities($_POST['rock']);
     $bug = htmlentities($_POST['bug']);
-    if (is_numeric($rock) && is_numeric($bug)) {
+    $rock = intval($rock);
+    $bug = intval($rock);
+    if (is_int($rock) && is_int($bug)) {
         if ($rock >= $bug) {
             main($rock, $bug);
         } else {
